@@ -261,20 +261,12 @@ class _BreakthroughState extends State<Breakthrough> {
       String v = input;
       pairedValues.add(v);
       pairedValues.remove('');
-      // print(pairedValues);
-      // print(listInput);
-      // print(listArithmeticIndex);
-      // print(arithmeticValue);
-    } else if (listArithmeticIndex.isNotEmpty) {
+     } else if (listArithmeticIndex.isNotEmpty) {
       v = input.substring(
           (listArithmeticIndex[listArithmeticIndex.length - 1]), input.length);
       pairedValues.add(v);
       pairedValues.remove('');
-      //   print(pairedValues);
-      //   print(listInput);
-      //   print(listArithmeticIndex);
-      //   print(arithmeticValue);
-      //
+      
     }
   }
 
