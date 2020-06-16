@@ -29,6 +29,8 @@ class _BreakthroughState extends State<Breakthrough> {
         input.endsWith('-') ||
         input.endsWith('x') ||
         input.endsWith('/');
+
+    
     //this changes the input to become empty if you've got an error
     if (input == 'invalid input') {
       input = '';
@@ -39,10 +41,17 @@ class _BreakthroughState extends State<Breakthrough> {
       return;
     }
     //this changes the input to 0.0 if previous input was empty and the new input is a fullstop(.)
+    
+    
     if (m == '.' && input == '') {
-      input = '0.0';
+      input = '+0.0';
       return;
     }
+    if(input==''){
+      input='+$m';
+      return;
+    }
+
     //this adds 0.0 to the input if previous input endswith an arithmetic operation
     // and the new input is a fullstop(.)
     if (function && m == '.') {
@@ -80,19 +89,18 @@ class _BreakthroughState extends State<Breakthrough> {
   }
 
   enterArithmetic(m) {
-
     bool arithemetic = m == '+' || m == '-' || m == 'x' || m == '/';
     bool function = input.endsWith('+') ||
         input.endsWith('-') ||
         input.endsWith('x') ||
         input.endsWith('/');
-        
-    if(input==''&& (m=='x'||m=='/')){
+
+    if (input == '' && (m == 'x' || m == '/')) {
       return;
     }
-    if(answer.isInfinite){
-      input='';
-      answer=0;
+    if (answer.isInfinite) {
+      input = '';
+      answer = 0;
       return;
     }
 
@@ -106,43 +114,17 @@ class _BreakthroughState extends State<Breakthrough> {
     }
     input = input + '$m';
   }
-  multiplyAndDivide(restofvalues){
-
-
-//           if (!listInput.contains('+') && !listInput.contains('-')) {
-//             if (restofvalues.startsWith('/')) {
-//               print('yes');
-//               answer = answer /
-//                   double.parse(
-//                       restofvalues.substring(1, restofvalues.length));
-//             } else if (restofvalues.startsWith('x')) {
-//               print('yes');
-//               answer = answer *
-//                   double.parse(
-//                       restofvalues.substring(1, restofvalues.length));
-          
-//             }}
-    
-// else{
-
-// }
-
-  }
-
   solve() {
-  if(answer.isInfinite){
-    return;
-  }
-    List<String> paireddintandmult = [];
+    if (answer.isInfinite) {
+      return;
+    }
     bool function = input.endsWith('+') ||
         input.endsWith('-') ||
         input.endsWith('x') ||
         input.endsWith('/');
-        
-      if(pairedValues.isEmpty){
-          return;
-        }
- 
+    if (pairedValues.isEmpty) {
+      return;
+    }
     if (function) {
       return;
     }
@@ -152,80 +134,64 @@ class _BreakthroughState extends State<Breakthrough> {
     bool trace = true;
 
     if (pairedValues.length == 1) {
-      
       answer = double.parse(pairedValues[0]);
-      
-      return;
-    }
-   else{
+    } else {
      answer = double.parse(pairedValues[0]);
-    for (int a = 1; a < pairedValues.length; a++) {
-     if(pairedValues[a].startsWith('+')||pairedValues[a].startsWith('-')){
-       trace=true;
-     }
-
-      if (pairedValues[a].startsWith('x') || pairedValues[a].startsWith('/')) {   
-        print('enterd here');
-          if (!listInput.contains('+') && !listInput.contains('-')) {
-            if (pairedValues[a].startsWith('/')) {
-              print('yes');
-              answer = answer /
-                  double.parse(
-                      pairedValues[a].substring(1, pairedValues[a].length));
-            } else if (pairedValues[a].startsWith('x')) {
-              print('yes');
-              answer = answer *
-                  double.parse(
-                      pairedValues[a].substring(1, pairedValues[a].length));
-          
-            }}
-          
-          else{
-            print('enterd here');
-            paireddintandmult=[];
-           double ans=0;
-            for (int b = 0; b < arithmeticValue.length; b++) {
-              String check = pairedValues[a - b];
-              paireddintandmult.add(pairedValues[a - b]);
-              if (check.startsWith('+') || check.startsWith('-')) {
-                int c = b;
-                paireddintandmult.removeWhere((element) =>
-                    element.startsWith('+') || element.startsWith('-'));
-                if (trace) {
-                  ank = answer - double.parse(pairedValues[a - c]);
-                  trace = false;
-                }
-                  
-                ans = double.parse(pairedValues[a - c]);
-                  print(ans);
-                for (int d = 0; d < paireddintandmult.length; d++) {
-                  if (paireddintandmult[d].startsWith('/')) {
-                    ans = ans /
-                        double.parse(paireddintandmult[d]
-                            .substring(1, paireddintandmult[d].length));
-                  } else if (paireddintandmult[d].startsWith('x')) {
-                    ans = ans *
-                        double.parse(paireddintandmult[d]
-                            .substring(1, paireddintandmult[d].length));
-                  }
-                }
-
-                print(paireddintandmult);
-                print(ans);
-                print(ank);
-                print('yup used d div and multiply');
-                answer = ank + ans;
-                break;
+      for (int a = 1; a < pairedValues.length; a++){
+        if (pairedValues[a].startsWith('+') ||
+            pairedValues[a].startsWith('-')) {
+          print(answer);
+          print('yes it is using add ans sub');
+          trace = true;
+          answer = answer + double.parse(pairedValues[a]);
+        } else if (pairedValues[a].startsWith('x') ||
+            pairedValues[a].startsWith('/')) {
+          List<String> paireddintandmult = [];
+          double ans = 0;
+          inner:
+          for (int b = 0; b < arithmeticValue.length; b++) {
+            String check = pairedValues[a - b];
+            //TODO: comeback to this
+            // if(a-b==0){
+            //   check='+'+pairedValues[0];
+            // }
+            if (check.startsWith('+') || check.startsWith('-')) {
+              int c = b;
+              print(paireddintandmult);
+              //this is just a precaution incase an element with + manages to enter the logic lol
+              // paireddintandmult.removeWhere((element) =>
+              //     element.startsWith('+') || element.startsWith('-'));
+              if (trace) {  
+                ank = answer - double.parse(pairedValues[a - c]);
+                trace = false;
               }
+              ans = double.parse(pairedValues[a - c]);
+              print(ans);
+              for (int d = 0; d < paireddintandmult.length; d++) {
+                if (paireddintandmult[d].startsWith('/')) {
+                  ans = ans /
+                      double.parse(paireddintandmult[d]
+                          .substring(1, paireddintandmult[d].length));
+                } else if (paireddintandmult[d].startsWith('x')) {
+                  ans = ans *
+                      double.parse(paireddintandmult[d]
+                          .substring(1, paireddintandmult[d].length));
+                }
+              }
+              print(paireddintandmult);
+              print(ans);
+              print(ank);
+              print('yup used d div and multiply');
+              
+              answer =ank + ans;
+              break inner;
             }
-          
+            paireddintandmult.add(pairedValues[a - b]);
         }
-      } else if(pairedValues[a].startsWith('+')||pairedValues[a].startsWith('-')){
-        print('yes it is using add ans sub');
-        answer = answer + double.parse(pairedValues[a]);
+        
       }
-    }}
-  }
+    }
+  }}
 
   passThrough() {
     listInput = [];
@@ -261,12 +227,11 @@ class _BreakthroughState extends State<Breakthrough> {
       String v = input;
       pairedValues.add(v);
       pairedValues.remove('');
-     } else if (listArithmeticIndex.isNotEmpty) {
+    } else if (listArithmeticIndex.isNotEmpty) {
       v = input.substring(
           (listArithmeticIndex[listArithmeticIndex.length - 1]), input.length);
       pairedValues.add(v);
       pairedValues.remove('');
-      
     }
   }
 
@@ -372,11 +337,11 @@ class _BreakthroughState extends State<Breakthrough> {
                                     onPressed: () {
                                       setState(() {
                                         delbutn();
-                                       if(input.isNotEmpty){
-                                         solve();
-                                       } else{
-                                         answer=0;
-                                       }
+                                        if (input.isNotEmpty) {
+                                          solve();
+                                        } else {
+                                          answer = 0;
+                                        }
                                       });
                                     },
                                     child: Text('del'))),
@@ -511,7 +476,7 @@ class _BreakthroughState extends State<Breakthrough> {
                                           onPressed: () {
                                             setState(() {
                                               solve();
-                                              input = '';
+                                              input =answer.toString().startsWith('-')? '$answer':'+$answer';
                                             });
                                           },
                                           child: Text('=')),
